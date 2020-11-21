@@ -1,24 +1,28 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const bodyParser = require('body-parser')
+const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+
+//configures env.-variables
+dotenv.config();
 
 //import DB
-const { db } = require('./database');
+const { db } = require("./database");
 db.authenticate(); //tests the connection
 
 //Added Json Body-parser
 app.use(bodyParser.json());
 
 //Import Routes
-const accountRoute = require('./routes/accounts');
-app.use('/accounts', accountRoute)
+const accountRoute = require("./routes/accounts");
+app.use("/accounts", accountRoute);
 
 //Initial route
-app.get('/', (req, res) => {
-    res.send('Welcome to the banking app');
+app.get("/", (req, res) => {
+  res.send("Welcome to the banking app");
 });
 
 //Start listening
 app.listen(8080, () => {
-    console.log('Server listening on 8080');
+  console.log("Server listening on 8080");
 });
