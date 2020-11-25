@@ -1,28 +1,22 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const dotenv = require("dotenv");
+const accountRoute = require("./routes/accountsRoutes");
+const clientRoute = require("./routes/clientRoutes");
 
-//configures env.-variables
-dotenv.config();
-
-//import DB
-const { db } = require("./database");
-db.authenticate(); //tests the connection
-
-//Added Json Body-parser
+//Added Body-parser middleware
 app.use(bodyParser.json());
 
-//Import Routes
-const accountRoute = require("./routes/accounts");
+//Routes
 app.use("/accounts", accountRoute);
+app.use("/clients", clientRoute);
 
-//Initial route
-app.get("/", (req, res) => {
-  res.send("Welcome to the banking app");
-});
-
-//Start listening
+//Replace with loadbalancer
 app.listen(8080, () => {
   console.log("Server listening on 8080");
 });
+
+//needs SSL implementation
+//needs load-balancer implementation
+//needs one-click-run solution for easy excecution
+//needs to pass test
