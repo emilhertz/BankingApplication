@@ -1,2 +1,5 @@
 node_modules/
 SSL/
+bank.db
+dbConnection.js
+run.sh

@@ -4,7 +4,7 @@ const Account = require("../models/accountModel");
 exports.allAccountsController = async (req, res) => {
   try {
     let allAccounts = await Account.findAll();
-    res.end(JSON.stringify(allAccounts));
+    res.json(allAccounts);
   } catch (e) {
     res.status(500).end(e.message);
   }
@@ -18,8 +18,7 @@ exports.createAccountController = async (req, res) => {
       alias,
       balance,
       client_id,
-    });
-    res.end("account created");
+    }).then((user) => res.json(user));
   } catch (e) {
     res.status(500).end(e.message);
   }
@@ -34,9 +33,10 @@ exports.accountController = async (req, res) => {
         id,
       },
     });
+    //REPLACE WITH !ACCOUNT.LENGTH??
     if (account.length === 0)
       throw new Error(`No account with id: ${id} found`);
-    res.end(JSON.stringify(account));
+    res.json(account);
   } catch (e) {
     res.status(500).end(e.message);
   }
@@ -54,8 +54,10 @@ exports.updateAccountController = async (req, res) => {
           id,
         },
       }
-    );
-    res.end("Account updated!");
+    ).then(() => {
+      //logic to pass test - returns updated instance
+      Account.findAll({ where: { id } }).then((account) => res.json(account));
+    });
   } catch (e) {
     res.status(500).end(e.message);
   }
@@ -70,7 +72,7 @@ exports.deleteAccountController = async (req, res) => {
         id,
       },
     });
-    res.end("Account deleted");
+    res.json("Account deleted");
   } catch (e) {
     res.status(500).end(e.message);
   }
@@ -88,7 +90,7 @@ exports.getAccountBalanceController = async (req, res) => {
     });
     if (balance.length === 0)
       throw new Error(`No account with id: ${id} found`);
-    res.end(JSON.stringify(balance));
+    res.json(balance);
   } catch (e) {
     res.status(500).end(e.message);
   }

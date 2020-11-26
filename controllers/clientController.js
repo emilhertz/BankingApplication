@@ -4,7 +4,7 @@ const Client = require("../models/clientModel");
 exports.allClientsController = async (req, res) => {
   try {
     let clients = await Client.findAll();
-    res.end(JSON.stringify(clients));
+    res.json(clients);
   } catch (e) {
     res.status(500).end(e.message);
   }
@@ -19,8 +19,10 @@ exports.createClientController = async (req, res) => {
       lastname,
       streetAddress,
       city,
+    }).then((client) => {
+      res.json(client);
     });
-    res.end("Client Created!");
+    //res.end("Client Created!");
   } catch (e) {
     res.status(500).end(e.message);
   }
@@ -36,7 +38,7 @@ exports.clientController = async (req, res) => {
       },
     });
     if (client.length === 0) throw new Error(`No client with id: ${id} found`);
-    res.end(JSON.stringify(client));
+    res.json(client);
   } catch (e) {
     res.status(500).end(e.message);
   }
@@ -54,8 +56,10 @@ exports.updateClientController = async (req, res) => {
           id,
         },
       }
-    );
-    res.end("Client Updated!");
+    ).then(() => {
+      //logic to pass test - returns updated instance
+      Client.findAll({ where: { id } }).then((client) => res.json(client));
+    });
   } catch (e) {
     res.status(500).end(e.message);
   }
@@ -70,7 +74,7 @@ exports.deleteClientController = async (req, res) => {
         id,
       },
     });
-    res.end("Client Deleted!");
+    res.json("Client Deleted!");
   } catch (e) {
     res.status(500).end(e.message);
   }
